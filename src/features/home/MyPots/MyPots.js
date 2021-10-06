@@ -12,6 +12,7 @@ import { Cards } from '../../../components/Cards';
 import styles from './styles';
 import { RoutedButton } from '../../../components/Buttons/BaseButton';
 import clsx from 'clsx';
+import { ClaimableBonusNotification } from '../../../components/ClaimableBonusNotification';
 
 const useStyles = makeStyles(styles);
 
@@ -76,7 +77,7 @@ const MyPots = ({ selected }) => {
           <Grid item>
             <RoutedButton
               className={clsx(classes.button, { [classes.buttonActive]: selected === 'active' })}
-              to="/my-moonpots"
+              to={{ pathname: '/my-moonpots', state: { tabbed: true } }}
             >
               {t('buttons.myActivePots')}
             </RoutedButton>
@@ -84,7 +85,7 @@ const MyPots = ({ selected }) => {
           <Grid item>
             <RoutedButton
               className={clsx(classes.button, { [classes.buttonActive]: selected === 'eol' })}
-              to="/my-moonpots/eol"
+              to={{ pathname: '/my-moonpots/eol', state: { tabbed: true } }}
             >
               {t('buttons.myPastPots')}
             </RoutedButton>
@@ -94,10 +95,12 @@ const MyPots = ({ selected }) => {
         <div className={classes.potsContainer}>
           <div className={classes.spacer}>
             <Grid container>
-              {/*Pots*/}
+              {selected === 'active' ? (
+                <ClaimableBonusNotification className={classes.claimableBonuses} />
+              ) : null}
               <Cards sameHeight={false}>
                 {filtered.length === 0 ? (
-                  <NoPotsCard />
+                  <NoPotsCard selected={selected} />
                 ) : (
                   filtered.map(item => <Pot key={item.id} item={item} />)
                 )}
